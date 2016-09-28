@@ -21,11 +21,11 @@ Plugin 'scrooloose/nerdtree'
 "Plugin 'tpope/vim-fugitive'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'tpope/vim-rails'
-"Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tomtom/tcomment_vim'
-Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+"Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 "Plugin 'scrooloose/syntastic'
 "Plugin 'Raimondi/delimitMate'
 Plugin 'ervandew/supertab'
@@ -72,6 +72,7 @@ autocmd Filetype css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 " airline config
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='molokai'
 
 " syntax highlighting and auto-indentation
 syntax on
@@ -92,7 +93,6 @@ colorscheme monokai
 let mapleader=","
 
 " Key bindings
-nmap <leader>d :NERDTreeTabsToggle<CR>
 
 " Enter new line without exiting the normal mode
 " nmap <S-Enter> O<Esc>
@@ -127,6 +127,20 @@ let g:ctrlp_prompt_mappings = {
 " Copy to and paste from clipboard
 set clipboard=unnamedplus
 " NERDTree settings
+map <C-\> :NERDTreeToggle<CR>
 " autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-"
+
+" Align blocks of text and keep them selected
+vmap < <gv
+vmap > >gv
+vnoremap <c-/> :TComment<cr>
+
+" easy movement in the page
+noremap H ^
+noremap L g_
+noremap J 5j
+noremap K 5k
+
+" copy current files path to clipboard
+nmap cp :let @+ = expand("%") <cr>
