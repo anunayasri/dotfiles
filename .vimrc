@@ -2,7 +2,18 @@
 "
 set encoding=utf-8
 set nocompatible              " be iMproved, required
-filetype off                  " required
+set autoread                  " detect when a file is changed
+
+set history=1000              " change history to 1000
+set textwidth=120
+
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
+" enable 24 bit color support if supported
+if (has("termguicolors"))
+    set termguicolors
+endif
 
 " vundle
 filetype off
@@ -48,9 +59,11 @@ Plugin 'leafgarland/typescript-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+set number                  " show line numbers
+
 filetype plugin indent on    " required
 
-set number
 " In a codebase that uses 4 space characters for each indent, here are good settings to start with
 set tabstop=2 " show existing tab with 4 spaces width
 set softtabstop=0 smarttab
@@ -82,24 +95,37 @@ filetype plugin on
 inoremap # X<C-H>#
 set ai
 set si
-set cursorline                  " highligt current line
+set cursorline              " highligt current line
 
-set laststatus=2                " Always show statusline
-" set mouse=a                     " Automatically enable mouse usage
-set hlsearch
+set autoindent              " automatically set indent of new line
+set smartindent
+
+set laststatus=2            " Always show statusline
+" set mouse=a               " Automatically enable mouse usage
+
+" Searching
+set ignorecase              " case insensitive searching
+set smartcase               " case-sensitive if expresson contains a capital letter
+set hlsearch                " highlight search results
+set incsearch               " set incremental search, like modern browsers
+set nolazyredraw            " don't redraw while executing macros
 colorscheme monokai
 
 " Set <leader> key
 let mapleader=","
 
-" Key bindings
+
+nmap <leader>, :w<cr>       " shortcut to save
 
 " Enter new line without exiting the normal mode
 " nmap <S-Enter> O<Esc>
 " nmap <CR> o<Esc>
 
-" Toggle paste mode
-set pastetoggle=<F2>
+
+set pastetoggle=<leader>v   " Toggle paste mode
+
+
+nmap <leader><space> :%s/\s\+$<cr>  " remove extra whitespace
 
 " Quickly switch between tabs
 nnoremap <C-Left> :tabprevious<CR>
