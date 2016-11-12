@@ -4,16 +4,19 @@ set encoding=utf-8
 set nocompatible              " be iMproved, required
 set autoread                  " detect when a file is changed
 
+" Set <leader> key
+let mapleader=","
+
 set history=1000              " change history to 1000
-set textwidth=120
+" set textwidth=120
 
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
 " enable 24 bit color support if supported
-if (has("termguicolors"))
-    set termguicolors
-endif
+" if (has("termguicolors"))
+    " set termguicolors
+" endif
 
 " vundle
 filetype off
@@ -26,7 +29,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'sickill/vim-monokai'
 
 " plugins
-"Plugin 'mileszs/ack.vim'
+Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 "Plugin 'tpope/vim-fugitive'
@@ -37,7 +40,7 @@ Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tomtom/tcomment_vim'
 "Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-"Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 "Plugin 'Raimondi/delimitMate'
 Plugin 'ervandew/supertab'
 "Plugin 'tpope/vim-ragtag'
@@ -56,6 +59,8 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'elzr/vim-json'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'vim-scripts/searchfold'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -75,7 +80,7 @@ autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype ruby setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype eruby setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype eruby setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype typescript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
@@ -84,7 +89,9 @@ autocmd Filetype css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " airline config
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1       " enable tabline
+let g:airline#extensions#tabline#show_buffers = 0  " do not show open buffers in tabline
+let g:airline#extensions#tabline#show_splits = 0
 let g:airline_theme='molokai'
 
 " syntax highlighting and auto-indentation
@@ -109,13 +116,13 @@ set smartcase               " case-sensitive if expresson contains a capital let
 set hlsearch                " highlight search results
 set incsearch               " set incremental search, like modern browsers
 set nolazyredraw            " don't redraw while executing macros
+"redraws the screen and removes any search highlighting
+nnoremap <leader>c :nohl<CR>
+
 colorscheme monokai
 
-" Set <leader> key
-let mapleader=","
-
-
-nmap <leader>, :w<cr>       " shortcut to save
+" shortcut to save
+noremap <leader>, :w<cr>
 
 " Enter new line without exiting the normal mode
 " nmap <S-Enter> O<Esc>
@@ -124,8 +131,8 @@ nmap <leader>, :w<cr>       " shortcut to save
 
 set pastetoggle=<leader>v   " Toggle paste mode
 
-
-nmap <leader><space> :%s/\s\+$<cr>  " remove extra whitespace
+" remove extra whitespace
+nmap <leader><space> :%s/\s\+$<cr>  
 
 " Quickly switch between tabs
 nnoremap <C-Left> :tabprevious<CR>
@@ -135,9 +142,9 @@ nnoremap th :tabprev<CR>
 nnoremap tn :tabnew<CR>
 
 " FuzzyFinder mappings
-nmap ,f :FufFileWithCurrentBufferDir<CR>
-nmap ,b :FufBuffer<CR>
-nmap ,t :FufTaggedFile<CR>
+" nmap ,f :FufFileWithCurrentBufferDir<CR>
+" nmap ,b :FufBuffer<CR>
+" nmap ,t :FufTaggedFile<CR>
 
 " edit vimrc/zshrc and load vimrc bindings
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
@@ -168,5 +175,25 @@ noremap L g_
 noremap J 5j
 noremap K 5k
 
+" scroll the viewport faster
+nnoremap <C-j> 5<C-e>
+nnoremap <C-k> 5<C-y>
+
 " copy current files path to clipboard
 nmap cp :let @+ = expand("%") <cr>
+
+" Code folding
+set foldmethod=indent
+
+" Config for ack.vim to use 'ag' instead of 'ack'
+if executable('ag')
+  let g:ackprg = 'ag --nogroup --nocolor --column'
+endif
+
+nnoremap <Leader>f :Ack!<Space>
+
+" config for syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
