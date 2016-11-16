@@ -41,11 +41,15 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tomtom/tcomment_vim'
 "Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'scrooloose/syntastic'
-"Plugin 'Raimondi/delimitMate'
+Plugin 'Raimondi/delimitMate'
 Plugin 'ervandew/supertab'
 "Plugin 'tpope/vim-ragtag'
 "Plugin 'sukima/xmledit'
 " Plugin 'vim-scripts/FuzzyFinder'
+Plugin 'tpope/vim-surround'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
 
 " syntax files
 Plugin 'pangloss/vim-javascript'
@@ -60,7 +64,7 @@ Plugin 'elzr/vim-json'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Yggdroot/indentLine'
-Plugin 'vim-scripts/searchfold'
+Plugin 'vim-scripts/searchfold.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -190,10 +194,34 @@ if executable('ag')
   let g:ackprg = 'ag --nogroup --nocolor --column'
 endif
 
-nnoremap <Leader>f :Ack!<Space>
+nnoremap <Leader>a :Ack!<Space>
 
 " config for syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+
+
+" autosaave/autoload sessions
+function! MakeSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  if (filewritable(b:sessiondir) != 2)
+    exe 'silent !mkdir -p ' b:sessiondir
+    redraw!
+  endif
+  let b:filename = b:sessiondir . '/session.vim'
+  exe "mksession! " . b:filename
+endfunction
+
+function! LoadSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+    exe 'source ' b:sessionfile
+  else
+    echo "No session loaded."
+  endif
+endfunction
+au VimEnter * nested :call LoadSession()
+au VimLeave * :call MakeSession()
