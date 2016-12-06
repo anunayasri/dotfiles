@@ -27,12 +27,13 @@ Plugin 'gmarik/Vundle.vim'
 " color schemes
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'sickill/vim-monokai'
+Plugin 'morhetz/gruvbox'
 
 " plugins
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
-"Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'tpope/vim-rails'
 Plugin 'vim-airline/vim-airline'
@@ -40,7 +41,7 @@ Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tomtom/tcomment_vim'
 "Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'Raimondi/delimitMate'
 Plugin 'ervandew/supertab'
 "Plugin 'tpope/vim-ragtag'
@@ -71,8 +72,6 @@ call vundle#end()            " required
 
 set number                  " show line numbers
 
-filetype plugin indent on    " required
-
 " In a codebase that uses 4 space characters for each indent, here are good settings to start with
 set tabstop=2 " show existing tab with 4 spaces width
 set softtabstop=0 smarttab
@@ -96,7 +95,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1       " enable tabline
 let g:airline#extensions#tabline#show_buffers = 0  " do not show open buffers in tabline
 let g:airline#extensions#tabline#show_splits = 0
-let g:airline_theme='molokai'
+let g:airline_theme='gruvbox'
 
 " syntax highlighting and auto-indentation
 syntax on
@@ -123,7 +122,8 @@ set nolazyredraw            " don't redraw while executing macros
 "redraws the screen and removes any search highlighting
 nnoremap <leader>c :nohl<CR>
 
-colorscheme monokai
+set background=dark         " use dark mode in color scheme
+colorscheme gruvbox
 
 " shortcut to save
 noremap <leader>, :w<cr>
@@ -201,27 +201,3 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-
-
-" autosaave/autoload sessions
-function! MakeSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  if (filewritable(b:sessiondir) != 2)
-    exe 'silent !mkdir -p ' b:sessiondir
-    redraw!
-  endif
-  let b:filename = b:sessiondir . '/session.vim'
-  exe "mksession! " . b:filename
-endfunction
-
-function! LoadSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  let b:sessionfile = b:sessiondir . "/session.vim"
-  if (filereadable(b:sessionfile))
-    exe 'source ' b:sessionfile
-  else
-    echo "No session loaded."
-  endif
-endfunction
-au VimEnter * nested :call LoadSession()
-au VimLeave * :call MakeSession()
