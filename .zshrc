@@ -83,4 +83,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
+# config that is commong to bash shell and zsh shell
 source ~/.shellrc
+
+# worked related config
+source ~/.workrc
