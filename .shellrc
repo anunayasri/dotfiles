@@ -1,0 +1,53 @@
+##################################
+#  user defined configurations   #
+##################################
+
+###### UNIX config ######
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias so='source'
+alias sobrc='source ~/.bashrc'
+alias ebrc='vim ~/.bashrc'
+alias sovrc='source ~/.vimrc'
+alias evrc='vim ~/.vimrc'
+alias open='xdg-open'
+
+export EDITOR=vim
+export VISUAL=vim
+
+export AWS_REGION="us-west-2"
+
+# powerline settings
+powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
+. /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
+
+# git aliases
+# This overwrites git aliases from oh-my-zsh git plugin
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+
+###### - ######
+
+###### dev config ######
+
+# django shortcuts
+alias djrun="python manage.py runserver 0.0.0.0:8000"
+alias py="python"
+alias pm="python manage.py"
+alias rs="python manage.py runserver"
+alias rsp="python manage.py runserver_plus"
+alias shp="python manage.py shell_plus"
+
+# config for python virtualenvwrapper
+export WORKON_HOME=$HOME/Envs
+source /usr/local/bin/virtualenvwrapper.sh
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+# rails shortcuts
+alias be="bundle exec"
+
+###### - ######
+
