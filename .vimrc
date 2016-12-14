@@ -51,7 +51,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
-
+Plugin 'tpope/vim-unimpaired'
 " syntax files
 Plugin 'pangloss/vim-javascript'
 Plugin 'tpope/vim-markdown'
@@ -95,7 +95,10 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1       " enable tabline
 let g:airline#extensions#tabline#show_buffers = 0  " do not show open buffers in tabline
 let g:airline#extensions#tabline#show_splits = 0
-let g:airline_theme='gruvbox'
+let g:airline#extensions#hunks#enabled = 0
+let g:airline#extensions#branch#enabled = 1        " disable fugitive integration
+let g:airline_section_y = ''
+let g:airline_theme='molokai'
 
 " syntax highlighting and auto-indentation
 syntax on
@@ -119,6 +122,7 @@ set smartcase               " case-sensitive if expresson contains a capital let
 set hlsearch                " highlight search results
 set incsearch               " set incremental search, like modern browsers
 set nolazyredraw            " don't redraw while executing macros
+set list listchars=trail:·,tab:▸·,extends:»,precedes:«
 "redraws the screen and removes any search highlighting
 nnoremap <leader>c :nohl<CR>
 
@@ -160,9 +164,13 @@ let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("e")': ['<c-t>'],
     \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
     \ }
+nnoremap <leader>t :CtrlP<CR>
+" CtrlP ignore files in .gitignore
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
 " Copy to and paste from clipboard
 set clipboard=unnamedplus
+
 " NERDTree settings
 map <C-\> :NERDTreeToggle<CR>
 " autocmd StdinReadPre * let s:std_in=1
