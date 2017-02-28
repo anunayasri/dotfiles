@@ -49,5 +49,12 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 # rails shortcuts
 alias be="bundle exec"
 
+# added by Anaconda2 4.2.0 installer
+# export PATH="/home/anunaya/anaconda2/bin:$PATH"
+
+# Java shortcuts
+alias eclipse="/opt/eclipse/eclipse -vmargs -Xmx256M &"
+
+export ECLIPSE_HOME='/opt/eclipse'
 ###### - ######
 

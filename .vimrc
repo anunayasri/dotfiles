@@ -3,6 +3,8 @@
 set encoding=utf-8
 set nocompatible              " be iMproved, required
 set autoread                  " detect when a file is changed
+set t_Co=256                  " to show 256 colors
+set linespace=3               " applicable only for GUI vim
 
 " Set <leader> key
 let mapleader=","
@@ -99,6 +101,7 @@ let g:airline#extensions#hunks#enabled = 0
 let g:airline#extensions#branch#enabled = 1        " disable fugitive integration
 let g:airline_section_y = ''
 let g:airline_theme='molokai'
+let g:airline#extensions#tabline#fnamemod = ':t'   " Just show the filename (no path) in the tab"
 
 " syntax highlighting and auto-indentation
 syntax on
@@ -167,6 +170,8 @@ let g:ctrlp_prompt_mappings = {
 nnoremap <leader>t :CtrlP<CR>
 " CtrlP ignore files in .gitignore
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+" Ignore files listed in gitignore
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Copy to and paste from clipboard
 set clipboard=unnamedplus
