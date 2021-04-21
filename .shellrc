@@ -2,8 +2,11 @@
 #  user defined configurations   #
 ##################################
 
+export LANG="en_US.UTF-8"
+
 ###### UNIX config ######
-alias ll='ls -alF'
+# alias ll='ls -alF'
+alias ll='exa -l'
 alias la='ls -A'
 alias l='ls -CF'
 alias so='source'
@@ -11,26 +14,52 @@ alias sobrc='source ~/.bashrc'
 alias ebrc='vim ~/.bashrc'
 alias sovrc='source ~/.vimrc'
 alias evrc='vim ~/.vimrc'
-alias open='xdg-open'
+# alias open='xdg-open'
+alias cls='clear'
+alias v='nvim'
 
 export EDITOR=vim
 export VISUAL=vim
 
 export AWS_REGION="us-west-2"
 
+# Include openssl libs to LIBRARY_PATH
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
+
 # powerline settings
-powerline-daemon -q
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
-. /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
+# powerline-daemon -q
+# POWERLINE_BASH_CONTINUATION=1
+# POWERLINE_BASH_SELECT=1
+# . /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
 
 # git aliases
 # This overwrites git aliases from oh-my-zsh git plugin
+alias gcd="git checkout develop2"   # Use develop2 in dev env
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+alias gb="git branch --sort=-committerdate"
+alias ghead="git --no-pager log --decorate=short --pretty=oneline --abbrev-commit -n1"
+
+# git checkout fuzzy
+alias gcof="git branch --sort=-committerdate | fzf --reverse | xargs git checkout"
+
+# git diff fuzzy
+gdf() {
+  preview="git diff $@ --color=always -- {-1}"
+  git diff $@ --name-only | fzf --reverse -m --ansi --preview $preview
+}
+
+# git add fuzzy
+gaf() {
+  preview="git diff $@ --color=always -- {-1}"
+  git ls-files -m -o --exclude-standard | fzf --reverse --print0 -m --ansi --preview $preview | xargs -0 -t -o git add
+}
 
 ###### - ######
 
 ###### dev config ######
+
+# Common directories
+alias tech-docs="cd '/Users/anunayasri/Google Drive/hireconn/tech_setup_docs'"
 
 # django shortcuts
 alias djrun="python manage.py runserver 0.0.0.0:8000"
@@ -40,11 +69,8 @@ alias rs="python manage.py runserver"
 alias rsp="python manage.py runserver_plus"
 alias shp="python manage.py shell_plus"
 
-# config for python virtualenvwrapper
-export WORKON_HOME=$HOME/Envs
-source /usr/local/bin/virtualenvwrapper.sh
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+# export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 # rails shortcuts
 alias be="bundle exec"
@@ -57,4 +83,35 @@ alias eclipse="/opt/eclipse/eclipse -vmargs -Xmx256M &"
 
 export ECLIPSE_HOME='/opt/eclipse'
 ###### - ######
+
+# C++ interpreter using cling
+# export PATH=$PATH:$HOME/Downloads/cling-build/cling-MacOSX-10.14.1-x86_64-0.6~dev-4683c83/bin
+
+# Brew install packages without updating the Homebrew itself
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# Settings for pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+
+# Update PATH to include node executables
+export PATH="/usr/local/bin/:$PATH"
+
+# This PATH modification should be last
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+  # eval "$(pyenv virtualenv-init -)"
+fi
+
+# android Studio specific settings
+# export ANDROID_HOME=$HOME/Library/Android/sdk
+# export PATH=$PATH:$ANDROID_HOME/emulator
+# export PATH=$PATH:$ANDROID_HOME/tools
+# export PATH=$PATH:$ANDROID_HOME/tools/bin
+# export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# Ejabberd config
+alias ejbctl='/usr/local/sbin/ejabberdctl'
+alias logs-ejb='tail -100f /usr/local/var/log/ejabberd/ejabberd.log'
+alias ejbconf='nvim /usr/local/etc/ejabberd/ejabberd.yml'
 
