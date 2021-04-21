@@ -7,10 +7,14 @@ set t_Co=256                  " to show 256 colors
 set linespace=3               " applicable only for GUI vim
 
 " Set <leader> key
-let mapleader=","
+let mapleader=" "
 
 set history=1000              " change history to 1000
 " set textwidth=120
+
+" Where should the new splits appear
+set splitbelow
+set splitright
 
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -32,6 +36,7 @@ Plugin 'sickill/vim-monokai'
 Plugin 'morhetz/gruvbox'
 
 " plugins
+Plugin 'ryanoasis/vim-devicons'
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
@@ -54,6 +59,7 @@ Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
 Plugin 'tpope/vim-unimpaired'
+
 " syntax files
 Plugin 'pangloss/vim-javascript'
 Plugin 'tpope/vim-markdown'
@@ -68,9 +74,13 @@ Plugin 'chase/vim-ansible-yaml'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'vim-scripts/searchfold.vim'
+Plugin 'Valloric/YouCompleteMe'
+Bundle 'davidhalter/jedi-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+set guifont = "SauceCodePro Nerd Font Mono:h11"
 
 set number                  " show line numbers
 
@@ -174,17 +184,18 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Copy to and paste from clipboard
-set clipboard=unnamedplus
+" set clipboard=unnamedplus
+set clipboard+=unnamed
 
 " NERDTree settings
 map <C-\> :NERDTreeToggle<CR>
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Align blocks of text and keep them selected
 vmap < <gv
 vmap > >gv
-vnoremap <c-/> :TComment<cr>
+vnoremap <C-/> :TComment<cr>
 
 " easy movement in the page
 noremap H ^
@@ -201,6 +212,7 @@ nmap cp :let @+ = expand("%") <cr>
 
 " Code folding
 set foldmethod=indent
+set foldlevel=99
 
 " Config for ack.vim to use 'ag' instead of 'ack'
 if executable('ag')
@@ -214,3 +226,22 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+
+"
+" Python/Djagno code specific settings
+"
+" YouCompleteMe
+let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
+let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
+let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
+let g:ycm_complete_in_comments = 1 " Completion in comments
+let g:ycm_complete_in_strings = 1 " Completion in string
+
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+set tags=tags
+autocmd BufWritePost *.py silent! !ctags -R --python-kinds=-i --languages=python > /dev/null 2>&1 &
+
+let g:jedi#use_splits_not_buffers = "top"
+let g:jedi#goto_definitions_command = "<leader>j"
