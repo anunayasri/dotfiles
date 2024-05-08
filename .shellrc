@@ -1,117 +1,166 @@
-##################################
-#  user defined configurations   #
-##################################
+# export HISTSIZE=10000       # number of lines to keep in memory
+# export HISTFILESIZE=10000   # number of lines to keep in the history file
 
-export LANG="en_US.UTF-8"
+# load git aliases
+source ./git/aliases.sh
 
-###### UNIX config ######
-# alias ll='ls -alF'
-alias ll='exa -l'
-alias la='ls -A'
-alias l='ls -CF'
-alias so='source'
-alias sobrc='source ~/.bashrc'
-alias ebrc='vim ~/.bashrc'
-alias sovrc='source ~/.vimrc'
-alias evrc='vim ~/.vimrc'
-# alias open='xdg-open'
-alias cls='clear'
-alias v='nvim'
+alias v=nvim
+alias la='ls -altr'
+alias ll='ls -ltr'
+alias epoch="date +%s"
+alias cat='bat'
+# node pkg for redis-cli: https://www.npmjs.com/package/redis-cli
+# alias redis-cli='rdcli'
 
-export EDITOR=vim
-export VISUAL=vim
-
-export AWS_REGION="us-west-2"
-
-# Include openssl libs to LIBRARY_PATH
-export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
-
-# powerline settings
-# powerline-daemon -q
-# POWERLINE_BASH_CONTINUATION=1
-# POWERLINE_BASH_SELECT=1
-# . /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
-
-# git aliases
-# This overwrites git aliases from oh-my-zsh git plugin
-alias gcd="git checkout develop2"   # Use develop2 in dev env
-alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
-alias gb="git branch --sort=-committerdate"
-alias ghead="git --no-pager log --decorate=short --pretty=oneline --abbrev-commit -n1"
-
-# git checkout fuzzy
-alias gcof="git branch --sort=-committerdate | fzf --reverse | xargs git checkout"
-
-# git diff fuzzy
-gdf() {
-  preview="git diff $@ --color=always -- {-1}"
-  git diff $@ --name-only | fzf --reverse -m --ansi --preview $preview
+function source_if_exists() {
+   if [[ -f "$1" ]]; then 
+       source "$1"
+   fi
 }
 
-# git add fuzzy
-gaf() {
-  preview="git diff $@ --color=always -- {-1}"
-  git ls-files -m -o --exclude-standard | fzf --reverse --print0 -m --ansi --preview $preview | xargs -0 -t -o git add
+# Set and unset values from .env file
+function setenv() {
+    filename="${1:-.env}"
+    if [[ -f "$filename" ]]; then
+        export $(grep -v '^#' $filename | sed 's/ *//g' | xargs)
+    else
+        echo "ERROR: $filename file not found"
+    fi
 }
 
-###### - ######
+function unsetenv() {
+    filename="${1:-.env}"
+    if [[ -f "$filename" ]]; then
+        unset $(grep -v '^#' $filename | sed -E 's/(.*)=.*/\1/' | xargs)
+    else
+        echo "ERROR: $filename file not found"
+    fi
+}
 
-###### dev config ######
+# zsh dependency
+# autoload -Uz compinit
+# compinit
 
-# Common directories
-alias tech-docs="cd '/Users/anunayasri/Google Drive/hireconn/tech_setup_docs'"
+# source_if_exists "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-# django shortcuts
-alias djrun="python manage.py runserver 0.0.0.0:8000"
-alias py="python"
-alias pm="python manage.py"
-alias rs="python manage.py runserver"
-alias rsp="python manage.py runserver_plus"
-alias shp="python manage.py shell_plus"
-
-
-# export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-# rails shortcuts
-alias be="bundle exec"
-
-# added by Anaconda2 4.2.0 installer
-# export PATH="/home/anunaya/anaconda2/bin:$PATH"
-
-# Java shortcuts
-alias eclipse="/opt/eclipse/eclipse -vmargs -Xmx256M &"
-
-export ECLIPSE_HOME='/opt/eclipse'
-###### - ######
-
-# C++ interpreter using cling
-# export PATH=$PATH:$HOME/Downloads/cling-build/cling-MacOSX-10.14.1-x86_64-0.6~dev-4683c83/bin
-
-# Brew install packages without updating the Homebrew itself
+# Load brew shell configs
+BREW_PATH=$(which brew)
+# eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$($BREW_PATH shellenv)"
+# Do not upgrade all packages on brew install <package>
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-# Settings for pyenv
-export PYENV_ROOT="$HOME/.pyenv"
+# Load startship prompt
+eval "$(starship init zsh)"
 
-# Update PATH to include node executables
-export PATH="/usr/local/bin/:$PATH"
+# Load zoxide: a smarter cd command
+eval "$(zoxide init zsh)"
 
-# This PATH modification should be last
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-  # eval "$(pyenv virtualenv-init -)"
+# Source aliases for git
+source ~/.config/git/aliases.sh
+
+### fzf settings ###
+
+# Setting fd as the default source for fzf
+export FZF_DEFAULT_COMMAND='fd --type f -E .git -E vendor -E node_modules -H'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Add local bin folder in PATH
+export PATH=$HOME/bin:$PATH
+
+###
+
+### Python settings ###
+
+# Use this setting if python is install using Homebrew.
+# This will enable the alias `python` that maps to a homebrew install of python.
+# Ensure that this does not collide with the system default python.
+# Upgrading python version might break things. Please explore more on this.
+# Details here: https://docs.brew.sh/Homebrew-and-Python
+export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+export npm_config_python=/Library/Frameworks/Python.framework/Versions/2.7/bin/python2
+
+# TODO: Some parts might have to move to ~/.zprofile. Figure out if things break.
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+
+# Disable changing the prompt on enabling venv
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+# Uncomment the following when working on python projects.
+# These increase the shell startup time :(
+# eval "$(pyenv init --path)"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+
+###
+
+### Java config ###
+
+ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+ export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
+
+### go config ###
+export PATH="$PATH:$HOME/go/bin"
+export GOOS=darwin
+
+### docker, docker-compose, Rancher Desktop config ###
+alias dk="docker"
+alias dcp="docker compose"
+
+# export PATH="$HOME/.rd/bin:$PATH"
+
+### kubectl config ###
+alias kb=kubectl
+
+### Mermaid JS ###
+# tool for text based diagrams
+function mermaid() {
+    echo "Service running on http://localhost:8000 ...\n\n"
+    docker run --publish 8000:80 ghcr.io/mermaid-js/mermaid-live-editor
+}
+
+### Node config ###
+
+# zsh-nvm to lazy load nvm scripts
+# https://github.com/lukechilds/zsh-nvm#manually
+
+ZSH_NVM_DIR="$HOME/.zsh-nvm"
+NVM_LAZY_LOAD=true
+if ! [[ -d $ZSH_NVM_DIR ]]; then
+    # download zsh-nvm
+    echo "Downloading zsh-nvm ..."
+    git clone https://github.com/lukechilds/zsh-nvm.git $ZSH_NVM_DIR
 fi
 
-# android Studio specific settings
-# export ANDROID_HOME=$HOME/Library/Android/sdk
-# export PATH=$PATH:$ANDROID_HOME/emulator
-# export PATH=$PATH:$ANDROID_HOME/tools
-# export PATH=$PATH:$ANDROID_HOME/tools/bin
-# export PATH=$PATH:$ANDROID_HOME/platform-tools
+source $ZSH_NVM_DIR/zsh-nvm.plugin.zsh
 
-# Ejabberd config
-alias ejbctl='/usr/local/sbin/ejabberdctl'
-alias logs-ejb='tail -100f /usr/local/var/log/ejabberd/ejabberd.log'
-alias ejbconf='nvim /usr/local/etc/ejabberd/ejabberd.yml'
+###
 
+### vifm config ###
+
+function vicd()
+{
+    local dst="$(command vifm --choose-dir - "$@")"
+    if [ -z "$dst" ]; then
+        echo 'Directory picking cancelled/failed'
+        return 1
+    fi
+    cd "$dst"
+}
+
+###
+
+### localstack config ###
+
+AWS_ENDPOINT_URL="http://localhost:4566"
+function awslocal()
+{
+    cmd="aws --endpoint-url=$AWS_ENDPOINT_URL $@"
+    echo "Running: $cmd"
+    eval "$cmd"
+}
+
+###
