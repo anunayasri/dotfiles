@@ -98,6 +98,9 @@ return require('packer').startup(function(use)
     }
   }
 
+  -- emojis 😊
+  use {'hrsh7th/cmp-emoji'}
+
   -- Debugger
   use {
     'mfussenegger/nvim-dap', -- needs go delve
@@ -133,5 +136,7 @@ return require('packer').startup(function(use)
 
   -- tmux related plugins
   use {'christoomey/vim-tmux-navigator'}
+
+  use {'terroo/vim-simple-emoji'}
 
 end)
