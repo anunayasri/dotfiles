@@ -11,7 +11,7 @@ lsp.preset('recommended')
 -- end)
 
 lsp.ensure_installed({
-    'pyright', 'gopls', 'jsonls', 'bashls', 'dockerls', 'vimls', 'mypy', -- 'ruff'
+    'pyright', 'gopls', 'jsonls', 'bashls', 'dockerls', 'vimls',  -- 'ruff'
 })
 
 require('lspconfig').pyright.setup({
@@ -36,3 +36,17 @@ null_ls.setup({
   }
 })
 
+-- https://lsp-zero.netlify.app/v3.x/autocomplete.html
+local cmp = require('cmp')
+local cmp_format = require('lsp-zero').cmp_format({details = true})
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+    {name = 'buffer'},
+    {name = 'path'},
+    {name = 'emoji'},
+  },
+  --- (Optional) Show source name in completion menu
+  formatting = cmp_format,
+})
