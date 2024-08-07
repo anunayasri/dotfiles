@@ -2,7 +2,7 @@
 # export HISTFILESIZE=10000   # number of lines to keep in the history file
 
 # load git aliases
-source ./git/aliases.sh
+source $HOME/.config/git/aliases.sh
 
 alias v=nvim
 alias la='ls -altr'
@@ -94,6 +94,12 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # eval "$(pyenv init --path)"
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
+
+# pipenv
+# Find the executable using `ls $(python -m site --user-base)/bin`
+# Docs: https://pipenv.pypa.io/en/latest/installation.html
+PIPENV_EXEC="$HOME/Library/Python/3.11/bin"
+export PATH="$PIPENV_EXEC:$PATH"
 
 ###
 
