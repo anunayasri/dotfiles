@@ -50,6 +50,9 @@ vim.opt.history=1000
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
+-- stop yanking text on pasting over selection
+vim.keymap.set('v', 'p', 'P')
+
 -- Work with neovim config files
 vim.keymap.set("n", "<leader>ev", function() vim.cmd(":tabnew ~/.config/nvim/lua/anunaya") end)
 vim.keymap.set("n", "<leader><CR>", function() vim.cmd(":so ~/.config/nvim/init.lua") end)
@@ -75,3 +78,8 @@ vim.keymap.set("n", "<Leader><Leader>", ":w<CR>")
 -- Substitue the word under cursor
 vim.keymap.set("n", "<leader>sw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
+-- Useful substitutions
+
+vim.cmd("iabbrev <expr> ,d strftime('%Y-%m-%d')")
+vim.cmd("iabbrev <expr> ,t strftime('%Y-%m-%dT%TZ')")
+vim.cmd("inoreabbrev <expr> ,u system('uuidgen')->trim()->tolower()")
