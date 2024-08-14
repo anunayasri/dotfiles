@@ -47,6 +47,11 @@ cmp.setup({
     {name = 'path'},
     {name = 'emoji'},
   },
-  --- (Optional) Show source name in completion menu
-  formatting = cmp_format,
+  -- to limit the width of pop window
+  formatting = {
+    format = function(entry, vim_item) 
+      vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
+      return vim_item
+    end
+  },
 })
