@@ -139,4 +139,9 @@ return require('packer').startup(function(use)
 
   use {'terroo/vim-simple-emoji'}
 
+  use {
+    "folke/todo-comments.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+  }
+
 end)
