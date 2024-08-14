@@ -55,3 +55,5 @@ cmp.setup({
     end
   },
 })
+
+require('todo-comments').setup{}
