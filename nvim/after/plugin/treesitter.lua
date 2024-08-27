@@ -9,6 +9,7 @@ require'nvim-treesitter.configs'.setup {
     'gomod',
     'lua',
     'dockerfile',
+    'yaml',
   },
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,

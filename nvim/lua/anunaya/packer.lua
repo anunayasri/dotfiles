@@ -105,6 +105,7 @@ return require('packer').startup(function(use)
   use {
     'mfussenegger/nvim-dap', -- needs go delve
     requires = {
+      {"nvim-neotest/nvim-nio"},
       {"rcarriga/nvim-dap-ui"},
       {"theHamsta/nvim-dap-virtual-text"},
       {"nvim-telescope/telescope-dap.nvim"},
