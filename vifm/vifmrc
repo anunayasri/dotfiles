@@ -90,7 +90,6 @@ set suggestoptions=normal,visual,view,otherpane,keys,marks,registers
 
 set ignorecase
 set smartcase
-:view
 
 " Don't highlight search results automatically
 
