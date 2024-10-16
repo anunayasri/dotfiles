@@ -83,7 +83,9 @@ require('ufo').setup({
     fold_virt_text_handler = handler,
 })
 
-require('treesitter-context').setup()
+require('treesitter-context').setup{
+    multiline_threshold = 1,
+}
 vim.cmd('hi TreesitterContext gui=underline guisp=Grey')
 
 -- Fold using treesitter
