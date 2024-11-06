@@ -4,11 +4,12 @@
 # load git aliases
 source $HOME/.config/git/aliases.sh
 
+export EDITOR=nvim
 alias v=nvim
 alias la='ls -altr'
 alias ll='ls -ltr'
 alias epoch="date +%s"
-alias cat='bat'
+# alias cat='bat'
 # node pkg for redis-cli: https://www.npmjs.com/package/redis-cli
 # alias redis-cli='rdcli'
 
@@ -51,13 +52,22 @@ eval "$($BREW_PATH shellenv)"
 export HOMEBREW_NO_AUTO_UPDATE=1
 
 # Load startship prompt
-eval "$(starship init zsh)"
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init zsh)"
+fi
 
 # Load zoxide: a smarter cd command
-eval "$(zoxide init zsh)"
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
 
 # Source aliases for git
 source ~/.config/git/aliases.sh
+
+# direnv settings 
+if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
 
 ### fzf settings ###
 
