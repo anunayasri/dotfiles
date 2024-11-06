@@ -1,0 +1,6 @@
+[aws]
+disabled = true
+
+[python]
+format = 'changeMe $virtualenv($style) '
+
