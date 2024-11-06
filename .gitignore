@@ -1,2 +1,3 @@
 *.swp
 .workrc
+.DS_Store
