@@ -112,6 +112,25 @@ return require('packer').startup(function(use)
     }
   }
 
+  -- Tests
+  use {
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "folke/lazydev.nvim",
+    }
+  }
+
+  use {
+    "nvim-neotest/neotest-python",
+    requires = {
+      "nvim-neotest/neotest"
+    }
+  }
+
   -- Golang
   use {
 	  'fatih/vim-go',

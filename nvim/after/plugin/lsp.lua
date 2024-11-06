@@ -1,17 +1,17 @@
 require("fidget").setup{}
 
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp_zero = require('lsp-zero')
+lsp_zero.preset('recommended')
 
--- lsp.on_attach(function(client, bufnr)
---   lsp.default_keymaps({buffer = bufnr})
---
---   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', {buffer = true})
---   vim.keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', {buffer = true})
--- end)
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 
-lsp.ensure_installed({
-    'pyright', 'gopls', 'jsonls', 'bashls', 'dockerls', 'vimls', 'ruff'
+  vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', {buffer = true})
+  vim.keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', {buffer = true})
+end)
+
+lsp_zero.ensure_installed({
+    'pyright', 'gopls', 'jsonls', 'bashls', 'dockerls', 'vimls', 'ruff', 'lua_ls'
 })
 
 local lspconf = require('lspconfig')
@@ -32,9 +32,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 lspconf.pyright.setup({
-    on_attach = function(client, bufnr)
-        print('hello pyright. python exec: ', settings.python.pythonPath)
-    end,
     filetypes = {"python"},
     settings = {
       pyright = {
@@ -66,9 +63,9 @@ lspconf.pyright.setup({
 
 lspconf.ruff.setup{}
 
-lsp.nvim_workspace()
+lsp_zero.nvim_workspace()
 
-lsp.setup()
+lsp_zero.setup()
 
 local null_ls = require('null-ls')
 
