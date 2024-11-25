@@ -81,7 +81,7 @@ neotest.setup({
         args = { "--log-level", "DEBUG" },
         runner = "pytest",
     })
-  }
+  },
 })
 
 -- neotest keymaps start with `t`

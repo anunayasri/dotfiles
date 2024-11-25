@@ -10,8 +10,12 @@ lsp_zero.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', {buffer = true})
 end)
 
+-- npm is required for few of the language servers
+-- install node & npm manually using nvm. Doc: https://nodejs.org/en/download/package-manager
+-- go is required for the go language server
 lsp_zero.ensure_installed({
-    'pyright', 'gopls', 'jsonls', 'bashls', 'dockerls', 'vimls', 'ruff', 'lua_ls'
+    'pyright', 'jsonls', 'bashls', 'dockerls', 'vimls', 'ruff', 'lua_ls',
+    -- 'gopls', 
 })
 
 local lspconf = require('lspconfig')
@@ -76,7 +80,23 @@ null_ls.setup({
     -- null_ls.builtins.diagnostics.mypy,
     null_ls.builtins.diagnostics.ruff,
     null_ls.builtins.formatting.ruff,
-  }
+  },
+  on_attach = function(client, bufnr)
+       print("null_ls: on_attach")
+        -- Autoformat on file write
+        if client.supports_method("textDocument/formatting") then
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = bufnr,
+                callback = function()
+                    vim.lsp.buf.format({ async = false })
+                end,
+            })
+        end
+
+        -- Code Action
+        local opts = { noremap = true, silent = true, buffer = bufnr }
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+    end,
 })
 
 -- https://lsp-zero.netlify.app/v3.x/autocomplete.html
@@ -92,8 +112,8 @@ cmp.setup({
   },
   -- to limit the width of pop window
   formatting = {
-    format = function(entry, vim_item) 
-      vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
+    format = function(entry, vim_item)
+      vim_item.abbr = string.sub(vim_item.abbr, 1, 40)
       return vim_item
     end
   },

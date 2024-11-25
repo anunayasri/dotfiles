@@ -22,6 +22,8 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 
+vim.g.have_nerd_font = true
+
 -- Set cursor as vertical line in insert mode
 vim.opt.guicursor = "i:ver25-iCursor"
 vim.opt.termguicolors = true
@@ -33,7 +35,7 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 
 vim.opt.cursorline = true
-vim.opt.colorcolumn = "81"
+vim.opt.colorcolumn = "121"
 
 vim.opt.list = true
 vim.opt.listchars = {trail='.', tab='  '}
@@ -83,3 +85,17 @@ vim.keymap.set("n", "<leader>sw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 vim.cmd("iabbrev <expr> ,d strftime('%Y-%m-%d')")
 vim.cmd("iabbrev <expr> ,t strftime('%Y-%m-%dT%TZ')")
 vim.cmd("inoreabbrev <expr> ,u system('uuidgen')->trim()->tolower()")
+
+-- Command to copy the current file's relative path to clipboard
+vim.api.nvim_create_user_command("CopyRelPath", function()
+    local path = vim.fn.expand("%")
+    vim.fn.setreg("+", path)
+    vim.notify('Copied "' .. path .. '" to the clipboard!')
+end, {})
+
+-- Command to copy the current file's absolute path to clipboard
+vim.api.nvim_create_user_command("CopyAbsPath", function()
+    local path = vim.fn.expand("%:p")
+    vim.fn.setreg("+", path)
+    vim.notify('Copied "' .. path .. '" to the clipboard!')
+end, {})

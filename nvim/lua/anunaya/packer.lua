@@ -65,7 +65,7 @@ return require('packer').startup(function(use)
   -- Vifm file browser for vim
   use('vifm/vifm.vim')
 
-  use('sheerun/vim-polyglot')
+  -- use('sheerun/vim-polyglot')
 
   use {
 	  'nvim-lualine/lualine.nvim',
@@ -175,6 +175,14 @@ return require('packer').startup(function(use)
   use {
     "folke/todo-comments.nvim",
     requires = { "nvim-lua/plenary.nvim" },
+  }
+
+  use {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+        require("nvim-autopairs").setup {}
+    end
   }
 
   if packer_bootstrap then
