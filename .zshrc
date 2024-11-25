@@ -1,5 +1,10 @@
+# To profile zsh load script uncomment the following and the last line '#zprof'
+# zmodload zsh/zprof
+
+# TODO: Combine zshrc and shellrc. No point in separating these 2 files.
+
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/anunayasri/.oh-my-zsh
+# export ZSH=/Users/anunayasri/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -7,11 +12,7 @@ export ZSH=/Users/anunayasri/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="honukai"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export PATH=~/Library/Python/2.7/bin:$PATH
+# export PATH=~/Library/Python/2.7/bin:$PATH
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -46,7 +47,10 @@ export PATH=~/Library/Python/2.7/bin:$PATH
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="dd.mm.yyyy"
+
+HISTSIZE=10000000
+SAVEHIST=10000000
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -55,14 +59,14 @@ export PATH=~/Library/Python/2.7/bin:$PATH
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git) # virtualenvwrapper) 
+# plugins=(git) # virtualenvwrapper) 
 
 # User configuration
 
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -93,9 +97,6 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Enable Starship prompt
-eval "$(starship init zsh)"
-
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
@@ -104,3 +105,5 @@ source ~/.shellrc
 
 # worked related config
 source ~/.workrc
+
+# zprof

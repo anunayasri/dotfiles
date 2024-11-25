@@ -45,9 +45,9 @@ function unsetenv() {
 # source_if_exists "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # Load brew shell configs
-BREW_PATH=$(which brew)
-# eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$($BREW_PATH shellenv)"
+# BREW_PATH=$(which brew)
+eval "$(/opt/homebrew/bin/brew shellenv)"
+# eval "$($BREW_PATH shellenv)"
 # Do not upgrade all packages on brew install <package>
 export HOMEBREW_NO_AUTO_UPDATE=1
 
@@ -75,6 +75,7 @@ fi
 export FZF_DEFAULT_COMMAND='fd --type f -E .git -E vendor -E node_modules -H'
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)     # Setup shell integration
 
 # Add local bin folder in PATH
 export PATH=$HOME/bin:$PATH
@@ -88,7 +89,10 @@ export PATH=$HOME/bin:$PATH
 # Ensure that this does not collide with the system default python.
 # Upgrading python version might break things. Please explore more on this.
 # Details here: https://docs.brew.sh/Homebrew-and-Python
-export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+# Append to the end of current PATH else sourcing zshrc while working in venv 
+# will overwrite the venv python
+export PATH="$PATH:$(brew --prefix python)/libexec/bin"
 
 export npm_config_python=/Library/Frameworks/Python.framework/Versions/2.7/bin/python2
 
@@ -108,8 +112,8 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # pipenv
 # Find the executable using `ls $(python -m site --user-base)/bin`
 # Docs: https://pipenv.pypa.io/en/latest/installation.html
-PIPENV_EXEC="$HOME/Library/Python/3.11/bin"
-export PATH="$PIPENV_EXEC:$PATH"
+# PIPENV_EXEC="$HOME/Library/Python/3.11/bin"
+# export PATH="$PIPENV_EXEC:$PATH"
 
 ###
 
@@ -144,7 +148,7 @@ function mermaid() {
 # https://github.com/lukechilds/zsh-nvm#manually
 
 ZSH_NVM_DIR="$HOME/.zsh-nvm"
-NVM_LAZY_LOAD=true
+# NVM_LAZY_LOAD=true
 if ! [[ -d $ZSH_NVM_DIR ]]; then
     # download zsh-nvm
     echo "Downloading zsh-nvm ..."
@@ -180,3 +184,6 @@ function awslocal()
 }
 
 ###
+
+export PYTHONBREAKPOINT=ipdb.set_trace
+
