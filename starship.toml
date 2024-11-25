@@ -1,6 +1,25 @@
 [aws]
 disabled = true
 
-[python]
-format = 'changeMe $virtualenv($style) '
+# [python]
+# format = 'changeMe $virtualenv($style) '
 
+[nodejs]
+disabled = true
+
+[java]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[package]
+disabled = true
+
+[time]
+# Enable or disable the time module
+disabled = false
+# use_12hr = true
+# format = '🕙[\[ $time \]]($style) '
+# Customize the color and style of the time display
+style = "bold blue"
