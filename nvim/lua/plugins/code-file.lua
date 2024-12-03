@@ -4,37 +4,39 @@
 -- Code Comments
 
 local ufo_fold_handler = function(virtText, lnum, endLnum, width, truncate)
-    local newVirtText = {}
-    local suffix = (' ↙ %d '):format(endLnum - lnum)
-    local sufWidth = vim.fn.strdisplaywidth(suffix)
-    local targetWidth = width - sufWidth
-    local curWidth = 0
-    for _, chunk in ipairs(virtText) do
-        local chunkText = chunk[1]
-        local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-        if targetWidth > curWidth + chunkWidth then
-            table.insert(newVirtText, chunk)
-        else
-            chunkText = truncate(chunkText, targetWidth - curWidth)
-            local hlGroup = chunk[2]
-            table.insert(newVirtText, {chunkText, hlGroup})
-            chunkWidth = vim.fn.strdisplaywidth(chunkText)
-            -- str width returned from truncate() may less than 2nd argument, need padding
-            if curWidth + chunkWidth < targetWidth then
-                suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
-            end
-            break
-        end
-        curWidth = curWidth + chunkWidth
+  local newVirtText = {}
+  local suffix = (' ↙ %d '):format(endLnum - lnum)
+  local sufWidth = vim.fn.strdisplaywidth(suffix)
+  local targetWidth = width - sufWidth
+  local curWidth = 0
+  for _, chunk in ipairs(virtText) do
+    local chunkText = chunk[1]
+    local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+    if targetWidth > curWidth + chunkWidth then
+      table.insert(newVirtText, chunk)
+    else
+      chunkText = truncate(chunkText, targetWidth - curWidth)
+      local hlGroup = chunk[2]
+      table.insert(newVirtText, { chunkText, hlGroup })
+      chunkWidth = vim.fn.strdisplaywidth(chunkText)
+      -- str width returned from truncate() may less than 2nd argument, need padding
+      if curWidth + chunkWidth < targetWidth then
+        suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+      end
+      break
     end
-    table.insert(newVirtText, {suffix, 'MoreMsg'})
-    return newVirtText
+    curWidth = curWidth + chunkWidth
+  end
+  table.insert(newVirtText, { suffix, 'MoreMsg' })
+  return newVirtText
 end
 
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    build = function()
+      require("nvim-treesitter.install").update({ with_sync = true })()
+    end,
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     opts = {
       -- FIXME: a long list prints multiple text lines on vim enter.
@@ -43,28 +45,31 @@ return {
         'bash',
         'diff',
         'html',
-        'lua',
-        'luadoc',
-        'vim',
-        'vimdoc',
+        -- 'lua',
+        -- 'luadoc',
+        -- 'vim',
+        -- 'vimdoc',
         'markdown',
-        'markdown_inline',
-        'query',
+        -- 'markdown_inline',
+        -- 'query',
         'json',
         'yaml',
 
         -- docker stuff
-        'dockerfile',
+        -- 'dockerfile',
 
         -- python stuff
         'python',
 
         -- go stuff
-        'go',
-        'gomod'
+        -- 'go',
+        -- 'gomod'
       },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
+      -- Autoinstall tries to check for parsers on nvim startup. This breaks occasionally. Disable it.
+      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+      auto_install = false,
+      -- Install parsers synchronously (only applied to `ensure_installed`)
+      sync_install = false,
       highlight = {
         enable = true,
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
@@ -90,7 +95,7 @@ return {
     config = function()
       -- fold config for ufo
       vim.o.foldcolumn = '0' -- '0' is not bad
-      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
 
@@ -100,14 +105,13 @@ return {
 
       require('ufo').setup({
         provider_selector = function(bufnr, filetype, buftype)
-          return {'treesitter', 'indent'}
+          return { 'treesitter', 'indent' }
         end,
         -- global handler
         -- `handler` is the 2nd parameter of `setFoldVirtTextHandler`,
         -- check out `./lua/ufo.lua` and search `setFoldVirtTextHandler` for detail.
         fold_virt_text_handler = ufo_fold_handler,
       }) -- end setup
-
     end
   },
 
@@ -142,13 +146,34 @@ return {
           -- To organize the imports.
           "ruff_organize_imports",
         },
-      }, -- end formatters_by_ft
-      format_on_save = {
-        -- These options will be passed to conform.format()
-        timeout_ms = 500,
-        lsp_format = "fallback",
-      },
+        json = { "jq" } -- TODO: not working
+      },                -- end formatters_by_ft
+      -- format_on_save = {
+      --   -- These options will be passed to conform.format()
+      --   timeout_ms = 500,
+      --   lsp_format = "fallback",
+      -- },
     }, -- end opts
+    config = function()
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = { "*.py", "*.lua" },
+        callback = function(args)
+          require("conform").format({
+            bufnr = args.buf,
+            timeout_ms = 500,
+            lsp_format = "fallback",
+          })
+        end, -- end callback
+      })
+
+      vim.keymap.set('n', '<leader>cf', function()
+        require("conform").format({
+          bufnr = vim.api.nvim_get_current_buf(),
+          timeout_ms = 500,
+          lsp_format = "fallback",
+        })
+      end, { desc = '' })
+    end
   },
 
 }

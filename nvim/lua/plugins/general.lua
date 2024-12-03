@@ -1,9 +1,12 @@
+-- general.lua : Contains plugin configs for customizing Neovim(and not code)
+-- functionality. This includes colorshemes, icons, statusline, tabline, profiling etc.
+
 return {
   -- the colorscheme should be available when starting Neovim
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = false, -- must load the colorscheme during startup
+    lazy = false,    -- must load the colorscheme during startup
     priority = 1000, -- must load this before all the other start plugins
     opts = {
       -- FIXME: This is not working. Why? `opts` should have worked.
@@ -13,7 +16,7 @@ return {
     },
     config = function()
       require("rose-pine").setup({
-        styles = {italic=false}
+        styles = { italic = false }
       })
       -- load the colorscheme here
       vim.cmd("colorscheme rose-pine")
@@ -32,7 +35,7 @@ return {
   },
 
   -- Better vim.input and vim.select UI elements
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
+  { "stevearc/dressing.nvim",      event = "VeryLazy" },
 
   -- TODO: Explore this more
   {
@@ -43,7 +46,7 @@ return {
   },
 
   -- TODO: See if this is helpful
-  { 
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
   },
@@ -51,25 +54,25 @@ return {
   -- Pretty icons, but requires a Nerd Font.
   { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
 
-  { 
+  {
     "nvim-lualine/lualine.nvim",
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-        require("lualine").setup {
-            options = {
-                theme = "auto", -- Or choose a theme like 'gruvbox', 'onedark', etc.
-            },
-            sections = {
-                lualine_a = {},
-                lualine_b = {
-                    { 'filename', color = { fg = "#ff5f87", bg = "#1e1e2e", gui = "bold" } },
-                },
-                lualine_c = {'diagnostics'},
-                lualine_x = {'location'},
-                lualine_y = {},
-                lualine_z = {}
-            },
-        }
+      require("lualine").setup {
+        options = {
+          theme = "auto", -- Or choose a theme like 'gruvbox', 'onedark', etc.
+        },
+        sections = {
+          lualine_a = {},
+          lualine_b = {
+            { 'filename', color = { fg = "#ff5f87", bg = "#1e1e2e", gui = "bold" } },
+          },
+          lualine_c = { 'diagnostics' },
+          lualine_x = { 'location' },
+          lualine_y = { 'progress' },
+          lualine_z = {}
+        },
+      }
     end,
   },
 
@@ -97,5 +100,11 @@ return {
       require("nvim-autopairs").setup {}
     end
   },
+
+  {
+    "chentoast/marks.nvim",
+    event = "VeryLazy",
+    opts = {},
+  }
 
 }
