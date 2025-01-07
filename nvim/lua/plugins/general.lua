@@ -6,8 +6,8 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = false,    -- must load the colorscheme during startup
-    priority = 1000, -- must load this before all the other start plugins
+    lazy = false,        -- must load the colorscheme during startup
+    priority = 1000,     -- must load this before all the other start plugins
     opts = {
       -- FIXME: This is not working. Why? `opts` should have worked.
       -- styles = {
@@ -60,12 +60,12 @@ return {
     config = function()
       require("lualine").setup {
         options = {
-          theme = "auto", -- Or choose a theme like 'gruvbox', 'onedark', etc.
+          theme = "auto",           -- Or choose a theme like 'gruvbox', 'onedark', etc.
         },
         sections = {
           lualine_a = {},
           lualine_b = {
-            { 'filename', color = { fg = "#ff5f87", bg = "#1e1e2e", gui = "bold" } },
+            { 'filename', path = 1, color = { fg = "#ff5f87", bg = "#1e1e2e", gui = "bold" } },
           },
           lualine_c = { 'diagnostics' },
           lualine_x = { 'location' },

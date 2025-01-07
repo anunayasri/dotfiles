@@ -19,6 +19,7 @@ return {
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      { "Myzel394/jsonfly.nvim" },
     }, -- end dependencies
     config = function()
       local actions = require('telescope.actions')
@@ -27,10 +28,10 @@ return {
           prompt_prefix = "$ ",
           mappings = {
             i = {
-            ["<C-j>"] = actions.move_selection_next,
-            ["<C-k>"] = actions.move_selection_previous,
-            ["<C-n>"] = actions.cycle_history_next,
-            ["<C-p>"] = actions.cycle_history_prev,
+              ["<C-j>"] = actions.move_selection_next,
+              ["<C-k>"] = actions.move_selection_previous,
+              ["<C-n>"] = actions.cycle_history_next,
+              ["<C-p>"] = actions.cycle_history_prev,
             },
           },
         }, -- end defaults
@@ -49,6 +50,7 @@ return {
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'jsonfly')
 
       -- Useful commands you can use
       --   :Telescope builtin - Finds Telescope's builtin commands
@@ -56,13 +58,13 @@ return {
 
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, {desc='Telescope find_files'})
-      vim.keymap.set('n', '<leader>fg', builtin.live_grep, {desc='Telescope live_grep: Grep in the workspace'})
-      vim.keymap.set('n', '<leader>fb', builtin.buffers, {desc='Telescope buffers'})
-      vim.keymap.set('n', '<leader>fh', builtin.help_tags, {desc='Telescope help_tags'})
-      vim.keymap.set('n', '<leader>fs', builtin.treesitter, {desc='Telescope treesitter: find symbols in the buffer'})
-      vim.keymap.set('n', '<leader>fw', builtin.grep_string, {desc='Telescope grep_string: find word under cursor'})
-      vim.keymap.set('n', '<leader>fr', builtin.resume, {desc='Telescope grep_string: find word under cursor'})
+      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find_files' })
+      vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live_grep: Grep in the workspace' })
+      vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+      vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help_tags' })
+      vim.keymap.set('n', '<leader>fs', builtin.treesitter, { desc = 'Telescope treesitter: find symbols in the buffer' })
+      vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Telescope grep_string: find word under cursor' })
+      vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Telescope grep_string: find word under cursor' })
       vim.keymap.set('n', '<leader>fo', builtin.buffers, { desc = 'Telescope buffers: find open files' })
 
       vim.keymap.set('n', '<leader>/', function()
@@ -74,11 +76,10 @@ return {
       end, { desc = 'Telescope fuzzy find in current buffer [/]' })
 
       vim.keymap.set("n", "<leader>df", function()
-          builtin.diagnostics({
-              bufnr = 0, -- Show diagnostics only for the current buffer
-          })
+        builtin.diagnostics({
+          bufnr = 0, -- Show diagnostics only for the current buffer
+        })
       end, { desc = "Show [d]iagnostics for current [f]ile" })
-
     end
   }, -- end telescope
 }
