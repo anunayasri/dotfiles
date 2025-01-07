@@ -117,11 +117,14 @@ return {
 
   {
     'nvim-treesitter/nvim-treesitter-context',
-    opts = {
-      mutliline_threshold = 1
-    },
+    -- opts = {
+    --   mutliline_threshold = 1
+    -- },
     config = function()
       vim.cmd('hi TreesitterContext gui=underline guisp=Grey')
+      require 'treesitter-context'.setup {
+        multiline_threshold = 1,
+      }
     end
   },
 
@@ -136,43 +139,51 @@ return {
 
   {
     'stevearc/conform.nvim',
-    opts = {
-      formatters_by_ft = {
-        python = {
-          -- To fix auto-fixable lint errors.
-          "ruff_fix",
-          -- To run the Ruff formatter.
-          "ruff_format",
-          -- To organize the imports.
-          "ruff_organize_imports",
-        },
-        json = { "jq" } -- TODO: not working
-      },                -- end formatters_by_ft
-      -- format_on_save = {
-      --   -- These options will be passed to conform.format()
-      --   timeout_ms = 500,
-      --   lsp_format = "fallback",
-      -- },
-    }, -- end opts
     config = function()
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = { "*.py", "*.lua" },
-        callback = function(args)
-          require("conform").format({
-            bufnr = args.buf,
-            timeout_ms = 500,
-            lsp_format = "fallback",
-          })
-        end, -- end callback
-      })
+      local conform = require("conform")
+
+      conform.setup({
+        formatters_by_ft = {
+          python = {
+            -- To fix auto-fixable lint errors.
+            "ruff_fix",
+            -- To run the Ruff formatter.
+            "ruff_format",
+            -- To organize the imports.
+            "ruff_organize_imports",
+          },
+          json = { "jq" }
+        }, -- end formatters_by_ft
+        format_on_save = {
+          -- These options will be passed to conform.format()
+          timeout_ms = 500,
+          lsp_format = "fallback",
+        },
+      }) -- end setup
 
       vim.keymap.set('n', '<leader>cf', function()
-        require("conform").format({
+        conform.format({
           bufnr = vim.api.nvim_get_current_buf(),
           timeout_ms = 500,
           lsp_format = "fallback",
         })
       end, { desc = '' })
+    end -- end config
+  },
+
+  {
+    "phelipetls/jsonpath.nvim",
+    ft = "json",
+    config = function()
+      -- show json path in the winbar
+      if vim.fn.exists("+winbar") == 1 then
+        vim.opt_local.winbar = "%{%v:lua.require'jsonpath'.get()%}"
+      end
+
+      -- send json path to clipboard
+      vim.keymap.set("n", "y<C-p>", function()
+        vim.fn.setreg("+", require("jsonpath").get())
+      end, { desc = "copy json path", buffer = true })
     end
   },
 
