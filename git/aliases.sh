@@ -21,7 +21,8 @@ alias gds="git diff --staged"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 alias glol='git log --graph --pretty='\''%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'' --abbrev-commit'
 # TODO: Bind to a key commbination to use the commit hash with other commands like 'git rebase -i <key comb>'
-alias glof="git log --pretty=oneline --abbrev-commit --color=always | fzf --ansi --preview 'echo {} | cut -f 1 -d \" \" | xargs git show --color=always --stat'"
+# alias glof="git log --pretty=oneline --abbrev-commit --color=always | fzf --ansi --preview 'echo {} | cut -f 1 -d \" \" | xargs git show --color=always --stat'"
+alias glof="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --color=always | fzf --ansi --preview 'echo {} | cut -f 1 -d \" \" | xargs git show --color=always --stat'"
 alias gc="git commit"
 alias gcmsg="git commit -m"
 alias gsb='git status -sb'
