@@ -4,6 +4,8 @@ return {
   -- Work with git inside nvim
   { 'tpope/vim-fugitive' },
 
+  { 'tpope/vim-rhubarb' },
+
   -- Extend fugitive.vim to support Bitbucket URLs in :Gbrowse
   { 'tommcdo/vim-fubitive' },
 
