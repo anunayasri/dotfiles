@@ -37,7 +37,7 @@ alias ghead="git --no-pager log --decorate=short --pretty=oneline --abbrev-commi
 
 # Save your WIP work as a commit
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
-alias gunwip='git log -n 1 | grep -q -c "--wip--" && git reset HEAD~1'
+alias gunwip='git log -n 1 | grep -q -c "\--wip--" && git reset HEAD~1'
 
 # Stash staged changes
 alias gsts='git stash -- $(git diff --staged --name-only)'
@@ -74,7 +74,7 @@ gpco() {
 # git checkout fuzzy
 function gcof() {
     local preview='git log --graph --abbrev-commit --color=always --pretty=format:"%C(auto)%h %d %s %C(green)(%cr) %C(bold blue)<%an>%Creset" --date=relative {}'
-    local branch=$(git branch --sort=committerdate --format='%(refname:short)' | fzf --reverse --preview $preview) && \
+    local branch=$(git branch --sort=-committerdate --format='%(refname:short)' | fzf --reverse --preview $preview) && \
     git checkout $branch
 }
 
