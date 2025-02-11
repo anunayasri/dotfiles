@@ -2,3 +2,4 @@
 .workrc
 .DS_Store
 nvim/plugin/packer_compiled.lua
+tmux/plugins/*
