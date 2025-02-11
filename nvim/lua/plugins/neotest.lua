@@ -10,17 +10,23 @@ return {
       "nvim-neotest/neotest-python", -- python
     },
     config = function()
-      require("neotest").setup({
+      local neotest = require("neotest")
+      neotest.setup({
         adapters = {
           require("neotest-python")({
             args = { "--log-level", "DEBUG" },
             runner = "pytest",
           })
         },
+        status = { virtual_text = true, signs = false, },
+        output = {
+          enabled = true,
+          open_on_run = true,
+        },
       })
 
       -- neotest keymaps start with `t`
-      set = vim.keymap.set
+      local set = vim.keymap.set
       set('n', '<leader>tn', function() neotest.run.run() end, { desc = "Run [n]earest test" })
       set('n', '<leader>tf', function() neotest.run.run(vim.fn.expand('%')) end, { desc = "Run test [f]ile" })
       set('n', '<leader>tl', function() neotest.run.run_last() end, { desc = "Run [l]ast test" })
@@ -33,12 +39,4 @@ return {
       set('n', '<leader>tt', function() neotest.run.stop() end, { desc = "[T]erminate neotest " })
     end
   },
-
-  -- {
-  --   "nvim-neotest/neotest-python",
-  --   dependencies = {
-  --     "nvim-neotest/neotest"
-  --   }
-  -- },
-  --
 }

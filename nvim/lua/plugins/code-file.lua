@@ -64,6 +64,9 @@ return {
         -- go stuff
         -- 'go',
         -- 'gomod'
+
+        -- rust stuff
+        'rust',
       },
       -- Autoinstall tries to check for parsers on nvim startup. This breaks occasionally. Disable it.
       -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
@@ -134,7 +137,9 @@ return {
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
+    opts = {
+      signs = false, -- don't show icons in the signs column
+    },
   },
 
   {
@@ -152,7 +157,8 @@ return {
             -- To organize the imports.
             "ruff_organize_imports",
           },
-          json = { "jq" }
+          json = { "jq" },
+          rust = { "rustfmt", lsp_format = "fallback" },
         }, -- end formatters_by_ft
         format_on_save = {
           -- These options will be passed to conform.format()
@@ -187,6 +193,14 @@ return {
     end
   },
 
-  { "github/copilot.vim" }
+  { "github/copilot.vim" },
+
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
+    end
+  },
+
 
 }

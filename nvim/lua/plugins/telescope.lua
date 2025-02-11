@@ -20,6 +20,10 @@ return {
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
       { "Myzel394/jsonfly.nvim" },
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
+        version = "^1.0.0",
+      },
     }, -- end dependencies
     config = function()
       local actions = require('telescope.actions')
@@ -51,6 +55,7 @@ return {
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(require('telescope').load_extension, 'jsonfly')
+      pcall(require('telescope').load_extension, 'live_grep_args')
 
       -- Useful commands you can use
       --   :Telescope builtin - Finds Telescope's builtin commands
