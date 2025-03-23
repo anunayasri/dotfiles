@@ -6,14 +6,8 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = false,        -- must load the colorscheme during startup
-    priority = 1000,     -- must load this before all the other start plugins
-    opts = {
-      -- FIXME: This is not working. Why? `opts` should have worked.
-      -- styles = {
-      --   italic = false,
-      -- }
-    },
+    lazy = false,    -- must load the colorscheme during startup
+    priority = 1000, -- must load this before all the other start plugins
     config = function()
       require("rose-pine").setup({
         styles = { italic = false }
@@ -60,7 +54,7 @@ return {
     config = function()
       require("lualine").setup {
         options = {
-          theme = "auto",           -- Or choose a theme like 'gruvbox', 'onedark', etc.
+          theme = "auto", -- Or choose a theme like 'gruvbox', 'onedark', etc.
         },
         sections = {
           lualine_a = {},
@@ -105,6 +99,6 @@ return {
     "chentoast/marks.nvim",
     event = "VeryLazy",
     opts = {},
-  }
+  },
 
 }
