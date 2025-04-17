@@ -67,10 +67,13 @@ return {
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live_grep: Grep in the workspace' })
       vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
       vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help_tags' })
-      vim.keymap.set('n', '<leader>fs', builtin.treesitter, { desc = 'Telescope treesitter: find symbols in the buffer' })
-      vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Telescope grep_string: find word under cursor' })
-      vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Telescope grep_string: find word under cursor' })
-      vim.keymap.set('n', '<leader>fo', builtin.buffers, { desc = 'Telescope buffers: find open files' })
+      vim.keymap.set('n', '<leader>fs', builtin.treesitter,
+        { desc = 'Telescope treesitter: [F]ind [s]ymbols in the buffer' })
+      vim.keymap.set('n', '<leader>fw', builtin.grep_string,
+        { desc = 'Telescope grep_string: [F]ind [w]ord under cursor' })
+      vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Telescope grep_string: [F]ind [r]esume' })
+      vim.keymap.set('n', '<leader>fo', builtin.buffers, { desc = 'Telescope buffers: [F]ind [o]pen files' })
+      vim.keymap.set('n', '<leader>fc', builtin.git_status, { desc = 'Telescope git_status: [F]ind [c]hanged files' })
 
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
