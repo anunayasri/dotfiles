@@ -100,10 +100,11 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# config that is commong to bash shell and zsh shell
+# TODO: Import shellrc configs to this file. I use generally macos.
+# config that is common to bash shell and zsh shell
 source ~/.shellrc
 
 # worked related config
-source ~/.workrc
+[ -f ~/.workrc ] && source ~/.workrc
 
 # zprof
