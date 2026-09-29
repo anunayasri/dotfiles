@@ -38,18 +38,28 @@ function unsetenv() {
     fi
 }
 
-# zsh dependency
-# autoload -Uz compinit
-# compinit
-
-# source_if_exists "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
 # Load brew shell configs
+# NOTE: must run before compinit -- brew shellenv prepends
+# /opt/homebrew/share/zsh/site-functions to fpath, and compinit only picks up
+# completions from fpath entries that exist when it runs.
 # BREW_PATH=$(which brew)
 eval "$(/opt/homebrew/bin/brew shellenv)"
 # eval "$($BREW_PATH shellenv)"
 # Do not upgrade all packages on brew install <package>
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# zsh dependency
+autoload -Uz compinit
+compinit
+
+# Make aliases inherit their target's completions (must come after compinit).
+# kb is guarded: kubectl ships no _kubectl completer, and an unguarded compdef
+# against a command with no completion errors out on every shell startup.
+(( $+_comps[kubectl] )) && compdef kb=kubectl
+compdef dk=docker
+compdef v=nvim
+
+# source_if_exists "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # Load startship prompt
 if command -v starship >/dev/null 2>&1; then
@@ -84,7 +94,7 @@ FZFGIT_FILE=~/.fzf-git/fzf-git.sh
 source <(fzf --zsh)     # Setup shell integration
 
 # Add local bin folder in PATH
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
 ###
 
@@ -98,22 +108,28 @@ export PATH=$HOME/bin:$PATH
 
 # Append to the end of current PATH else sourcing zshrc while working in venv 
 # will overwrite the venv python
-export PATH="$PATH:$(brew --prefix python)/libexec/bin"
+# export PATH="$PATH:$(brew --prefix python)/libexec/bin"
 
 export npm_config_python=/Library/Frameworks/Python.framework/Versions/2.7/bin/python2
 
 # TODO: Some parts might have to move to ~/.zprofile. Figure out if things break.
-# export PYENV_ROOT="$HOME/.pyenv"
-# export PATH="$PYENV_ROOT/bin:$PATH"
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 
 # Disable changing the prompt on enabling venv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 # Uncomment the following when working on python projects.
 # These increase the shell startup time :(
-# eval "$(pyenv init --path)"
-# eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
+# --no-rehash skips rebuilding the shims on every shell start (~170ms of a
+# ~850ms startup, measured via xtrace).
+#
+# BEHAVIOUR CHANGE: shims are no longer refreshed automatically. Run
+#   pyenv rehash
+# by hand after `pyenv install`, or after `pip install` of a package that ships
+# a console script. Symptom of a stale shim set: "command not found" for a tool
+# you just installed, even though it exists under $PYENV_ROOT/versions/*/bin.
+eval "$(pyenv init - --no-rehash zsh)"
 
 # pipenv
 # Find the executable using `ls $(python -m site --user-base)/bin`
@@ -160,7 +176,17 @@ function mermaid() {
 # https://github.com/lukechilds/zsh-nvm#manually
 
 ZSH_NVM_DIR="$HOME/.zsh-nvm"
-# NVM_LAZY_LOAD=true
+# Defer sourcing nvm.sh until the first nvm/node/npm/npx/yarn call. Was the
+# single biggest startup cost (~330ms of ~850ms, measured via zprof).
+#
+# BEHAVIOUR CHANGES:
+# 1. The first node/npm command in a shell pays a one-time ~300ms load. Every
+#    later call in that same shell is free.
+# 2. No .nvmrc auto-switch on shell start. Eager mode ran nvm_auto on every new
+#    shell, which picked up the .nvmrc of the directory you started in; now
+#    nothing reads .nvmrc until nvm loads. Run `nvm use` after cd-ing into a
+#    project, or unset this to get the old behaviour back.
+NVM_LAZY_LOAD=true
 if ! [[ -d $ZSH_NVM_DIR ]]; then
     # download zsh-nvm
     echo "Downloading zsh-nvm ..."
@@ -203,3 +229,6 @@ function awslocal()
 export PATH="$HOME/.cargo/bin:$PATH"
 
 alias rc="rustc"
+
+### libpq (postgres) config ###
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

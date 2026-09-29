@@ -237,7 +237,7 @@ return {
         end,
       }) -- end LspAttach
 
-      lspconfig.pyright.setup({
+      vim.lsp.config("pyright", {
         filetypes = { "python" },
         settings = {
           pyright = {
@@ -259,8 +259,27 @@ return {
         },   -- end settings
       })     -- end pyright setup
 
+      vim.lsp.enable('pyright')
 
-      lspconfig.ruff.setup {}
+      vim.lsp.config("ruff", {})
+      vim.lsp.enable("ruff")
+
+      -- clangd: C/C++ language server (autocompletion, diagnostics, go-to-def).
+      -- For accurate completion in real projects, give clangd a
+      -- compile_commands.json (e.g. `bear -- make`) or a compile_flags.txt at
+      -- the project root so it knows your include paths and flags.
+      vim.lsp.config("clangd", {
+        filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+        cmd = {
+          "clangd",
+          "--background-index",        -- index project in the background
+          "--clang-tidy",              -- run clang-tidy diagnostics
+          "--completion-style=detailed",
+          "--header-insertion=iwyu",   -- auto-insert #include on completion
+          "--function-arg-placeholders",
+        },
+      })
+      vim.lsp.enable("clangd")
 
 
       require('mason-lspconfig').setup({
@@ -269,6 +288,7 @@ return {
           'lua_ls',   -- for nvim configs
           'jsonls',   -- for json files
           'dockerls', -- docker is everywhere
+          'clangd',   -- C/C++ intellisense
           -- python project
           'ruff',     -- python formatter & linter
           'pyright',  -- python intellisense
@@ -314,7 +334,7 @@ return {
           local opts = { noremap = true, silent = true, buffer = bufnr }
           vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
         end,
-      }) -- end null_ls.setup()
+      }) -- end none_ls.setup()
     end
-  },     -- end null-ls.nvim
+  },     -- end none-ls.nvim
 }

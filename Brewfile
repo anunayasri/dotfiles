@@ -31,8 +31,9 @@ cask 'raycast'
 cask 'alacritty'
 cask 'rectangle'
 cask 'karabiner-elements'
+cask 'zed'
 
 # Mac store apps
-mas "WhatsApp Desktop", id: 310633997
-mas "Tick Tick", id: 966085870
-mas "Time Out", id: 402592703
+# mas "WhatsApp Desktop", id: 310633997
+# mas "Tick Tick", id: 966085870
+# mas "Time Out", id: 402592703

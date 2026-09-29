@@ -101,4 +101,7 @@ return {
     opts = {},
   },
 
+  -- Better view of diffs
+  { "sindrets/diffview.nvim" },
+
 }

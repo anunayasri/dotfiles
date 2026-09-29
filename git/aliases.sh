@@ -14,6 +14,7 @@ function git_current_repository() {
 
 alias gst="git status"
 alias gb="git branch --sort=-committerdate"
+alias gbc="git_current_branch"
 alias gco="git checkout"
 alias ga="git add"
 alias gd="git diff"
@@ -32,8 +33,10 @@ alias ggpull='git pull origin $(git_current_branch)'
 alias ggpur='git pull --rebase origin $(git_current_branch)'
 alias ggpush='git push origin $(git_current_branch)'
 
+# Same as glog, except list the latest 10 commits
+alias ghead="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -n10"
 # Check the lastest commit(head)
-alias ghead="git --no-pager log --decorate=short --pretty=oneline --abbrev-commit -n1"
+# alias ghead="git --no-pager log --decorate=short --pretty=oneline --abbrev-commit -n10"
 
 # Save your WIP work as a commit
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
@@ -76,6 +79,18 @@ function gcof() {
     local preview='git log --graph --abbrev-commit --color=always --pretty=format:"%C(auto)%h %d %s %C(green)(%cr) %C(bold blue)<%an>%Creset" --date=relative {}'
     local branch=$(git branch --sort=-committerdate --format='%(refname:short)' | fzf --reverse --preview $preview) && \
     git checkout $branch
+}
+
+
+# git worktree fuzzy switch (cd into a worktree), newest created first
+function gwtf() {
+    local preview='git log --graph --abbrev-commit --color=always --pretty=format:"%C(auto)%h %d %s %C(green)(%cr) %C(bold blue)<%an>%Creset" --date=relative {2}'
+    local worktree=$(git worktree list --porcelain | awk '/^worktree / {path=$2} /^branch / {branch=substr($2, index($2,"refs/heads/")+11); print path "\t" branch}' | \
+        while IFS=$'\t' read -r wt_path branch; do
+            printf '%s\t%s\t%s\n' "$(stat -f %B "$wt_path" 2>/dev/null || stat -c %W "$wt_path" 2>/dev/null || echo 0)" "$wt_path" "$branch"
+        done | sort -rn | cut -f2-)
+    local selected=$(echo "$worktree" | fzf --reverse --with-nth=2 --delimiter='\t' --preview $preview)
+    [[ -n "$selected" ]] && cd "$(echo "$selected" | cut -f1)"
 }
 
 

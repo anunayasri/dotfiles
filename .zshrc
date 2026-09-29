@@ -49,8 +49,8 @@ ZSH_THEME="honukai"
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="dd.mm.yyyy"
 
-HISTSIZE=10000000
-SAVEHIST=10000000
+export HISTSIZE=10000000
+export SAVEHIST=10000000
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -108,3 +108,4 @@ source ~/.shellrc
 [ -f ~/.workrc ] && source ~/.workrc
 
 # zprof
+

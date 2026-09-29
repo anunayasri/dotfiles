@@ -1,3 +1,5 @@
+right_format = """$time"""
+
 [aws]
 disabled = true
 
